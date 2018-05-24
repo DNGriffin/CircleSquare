@@ -1,6 +1,6 @@
 var windowX = 1200;
 var windowY = 900;
-var game = new Phaser.Game(windowX, windowY, Phaser.CANVAS, 'phaser-example', {
+var game = new Phaser.Game(windowX, windowY, Phaser.AUTO, 'Circle-Square', {
   preload: preload,
   create: create,
   update: update
@@ -8,7 +8,6 @@ var game = new Phaser.Game(windowX, windowY, Phaser.CANVAS, 'phaser-example', {
 
 function preload() {
 
-  game.load.image('player', 'assets/ship.png');
   game.load.image('circle', 'assets/circle3.png');
   game.load.image('square', 'assets/square2.png');
   game.load.image('star', 'assets/demoscene/star2.png');
@@ -18,20 +17,10 @@ function preload() {
 }
 
 var stars;
-var baddies;
-var player;
-var cursors;
-var fireButton;
-var bulletTime = 0;
-var frameTime = 0;
-var frames;
-var prevCamX = 0;
 
 function create() {
   game.world.setBounds(0, 0, windowX, windowY);
   game.physics.arcade.enable(this);
-  frames = Phaser.Animation.generateFrameNames('frame', 2, 30, '', 2);
-  frames.unshift('frame02');
   stars = game.add.group();
   // Create the group using the group factory
 
@@ -56,8 +45,6 @@ function create() {
   square = game.add.sprite(1075, 100, 'square');
   square.scale.setTo(0.5);
 
-  //lives
-  //var image = game.add.image(100, 100, 'pic');
   circle.proportion = 0.5;
   square.proportion = 0.5;
   circle.anchor.x = 0.5;
@@ -71,11 +58,6 @@ function create() {
   circle.body.immovable = true;
   square.body.immovable = true;
 
-  player = game.add.sprite(100, 1000, 'player');
-  player.anchor.x = 0.5;
-  game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1);
-  cursors = game.input.keyboard.createCursorKeys();
-  fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
   circleUp = game.input.keyboard.addKey(Phaser.Keyboard.W);
   circleDown = game.input.keyboard.addKey(Phaser.Keyboard.S);
@@ -85,7 +67,6 @@ function create() {
   squareDown = game.input.keyboard.addKey(Phaser.Keyboard.L);
   squareFire = game.input.keyboard.addKey(Phaser.Keyboard.P);
 
-  prevCamX = game.camera.x;
 
 }
 
@@ -119,16 +100,14 @@ function collideDetect(object, objectType) {
     object.proportion = 0.5;
   }
   object.scale.setTo(object.proportion);
-
 }
+
 var inputDelta = 0;
 
 function update() {
   inputDelta++;
   square.angle += 2;
   circle.angle += 2;
-
-
 
   if (this.game.physics.arcade.collide(circle, lasers, null, null, this)) {
     if (lasers.laserType !== "circle") {
@@ -175,5 +154,4 @@ function update() {
     }
   }
 
-  prevCamX = game.camera.x;
 }
